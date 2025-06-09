@@ -1,0 +1,29 @@
+https://pokeapi.co/api/v2/pokemon/{id}
+
+name = "name" (str)
+photo = "sprites" --> "front_default" (url)
+
+types = for type in types... "type" --> "name" (str)
+
+evolution 
+https://pokeapi.co/api/v2/evolution-chain/1/
+
+"chain" --> "evolves_to" --> "species" --> "name"
+
+
+
+
+
+With Wrapper
+
+import pokebase as pb
+
+pokemon = pb.pokemon({id})
+
+name = pokemon.name
+photo = pokemon.sprites.front_default
+
+Type
+>>> [type_.type.name for type_ in bulb.types]
+['grass', 'poison']
+
