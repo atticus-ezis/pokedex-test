@@ -1,19 +1,31 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from pokemon.models import Pokemon
+from pokemon.models import Pokemon, Type
 from pokemon.forms import SearchForm
-
 
 class PokemonListView(ListView):
     queryset = Pokemon.objects.all().order_by('pk')
     paginate_by = 20 
-    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = SearchForm(self.request.GET or None)
+        return context
+
     def get_queryset(self):
         queryset = super().get_queryset()
-        query = self.request.GET.get('pokemon_search')
-        if query:
-            return queryset.filter(name__istartswith=query)
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
+            name_query = form.cleaned_data['pokemon_name']
+            type_query = form.cleaned_data['pokemon_types']
+
+            if name_query:
+                queryset = queryset.filter(name__istartswith=name_query)
+                
+            if type_query:
+                queryset = queryset.filter(type__name__icontains=type_query)
+
         return queryset
 
 class PokemonDetailView(DetailView):

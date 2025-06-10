@@ -1,10 +1,15 @@
 <h1>Pokemon Display</h1>
 <a href="{% url 'create_pokemon' %}"><h3>Create Pokemon</h3></a>
+
+{% comment %} search {% endcomment %}
+
 <form method="get">
-  {% csrf_token %}
-  <input type="text" name="pokemon_search" />
+  {% csrf_token %} {{form.as_p}}
   <input type="submit" value="Submit" />
 </form>
+
+{% comment %} results {% endcomment %}
+
 <ul>
   {% for pokemon in pokemon_list%}
   <li><a href="{% url 'pokemon_detail' pokemon.pk %}">{{pokemon}}</a></li>
