@@ -27,9 +27,6 @@ class Command(BaseCommand):
                 # create pokemon
                 created_new_pokemon, created = Pokemon.objects.get_or_create(name=pokemon_name, photo_url=pokemon_photo_url)
 
-                # if not created:
-                # created_new_pokemon.new_field = 
-
                 # type
                 pokemon_type_data = data.get('types')
                 pokemon_types_list = [_dict['type']['name'] for _dict in pokemon_type_data]

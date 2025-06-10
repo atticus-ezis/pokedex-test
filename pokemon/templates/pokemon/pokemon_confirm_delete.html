@@ -1,0 +1,6 @@
+<h1>DELETE {{pokemon.name}}</h1>
+<p>Are you sure?</p>
+<form method="post">
+  {% csrf_token %} {{form.as_p}}
+  <input type="submit" value="I'm Sure" />
+</form>

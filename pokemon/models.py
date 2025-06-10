@@ -10,16 +10,20 @@ class Type(models.Model):
     def __str__(self):
         return self.name
     
-
 class Pokemon(models.Model):
     name = models.CharField(max_length=200)
-    photo_url = models.URLField()
+    photo_url = models.URLField(blank=True, null=True)
 
     type = models.ManyToManyField(Type, related_name="pokemon_set", verbose_name="Type")
     
     def __str__(self):
         return self.name
+    
 
+    
+    
+
+    
 
     
 

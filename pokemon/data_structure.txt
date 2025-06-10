@@ -11,6 +11,51 @@ https://pokeapi.co/api/v2/evolution-chain/1/
 "chain" --> "evolves_to" --> "species" --> "name"
 
 
+For Evolution Chart
+https://pokeapi.co/api/v2/pokemon
+species --> url --> 
+
+https://pokeapi.co/api/v2/pokemon-species/
+evoltuion_chain --> url -->
+
+https://pokeapi.co/api/v2/evolution-chain/
+
+"chain" --> "species" --> "name" (name for that pokemon)
+
+"chain" --> "evolves_to" --> "species" --> "name"
+
+multiple 
+"chain" --> "evolves_to" --> "species" & "evolves_to" --> "name"
+
+steps:
+## or use evolves_from_species
+go to species endpoint for all 151
+get Pokemon object with matching name
+
+get evolution_chain ---> url
+
+check if url in the dict_key
+if true --> assign key value to Pokemon object chain_field
+if false --> create value
+
+    visit evolution_chain url
+
+    create function to find all species names
+    assign each name with an existing Pokemon object 
+    make an array with the objects 
+    create a chain_object with the array
+
+    assign key value to the dictionary 
+
+Test 
+every pokemon object has a chain object 
+
+
+
+
+
+
+
 
 
 

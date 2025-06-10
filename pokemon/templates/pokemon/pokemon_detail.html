@@ -1,0 +1,9 @@
+<h1>Pokemon Detail</h1>
+<p>{{pokemon}}</p>
+<img src="{{pokemon.photo_url}}" alt="" />
+<h3>Type</h3>
+<ul>
+  {% for type in pokemon.type.all %}
+  <li>{{type.name}}</li>
+  {% endfor %}
+</ul>
