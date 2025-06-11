@@ -3,3 +3,4 @@
   {% csrf_token %} {{form.as_p}}
   <input type="submit" value="Submit" />
 </form>
+<a href="{% url 'pokemon_list_view' %}">View Pokemon</a>

@@ -1,10 +1,15 @@
 <h1>Pokemon Display</h1>
+{% if user.is_authenticated %}
+<h3>Signed in as: {{user.username}}</h3>
 <form action="{% url 'logout' %}" method="post">
   {% csrf_token %}
-  <button type="submit">Logout</button>
+  <button type="submit">Logout?</button>
 </form>
+{% else %}
+<p><a href="{% url 'register' %}">Create Account?</a></p>
+<p><a href="{% url 'login' %}">Login?</a></p>
+{% endif %}
 <a href="{% url 'create_pokemon' %}"><h3>Create Pokemon</h3></a>
-
 {% comment %} search {% endcomment %}
 
 <form method="get">
