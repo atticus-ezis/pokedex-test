@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
-from pokemon.models import Pokemon, Type, EvolutionChain
+from pokemon.models import Pokemon, Type
 
 import requests
 
 class Command(BaseCommand):
-    help = "Adds Pokemon"
+    help = "Adds Evoltion Chain to Pokemon"
 
     def add_arguments(self, parser):
         # Optional: add custom arguments
@@ -13,6 +13,9 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
+
+        evolution_list_dict = {}
+        
         for pokemon_id in range(options['start_id'], options['end_id']+1):
             try:
                 url = f'https://pokeapi.co/api/v2/pokemon-species/{pokemon_id}'
@@ -20,13 +23,45 @@ class Command(BaseCommand):
                 response.raise_for_status()
                 data = response.json()
 
-                evolves_from = data.get('evolves_from_species').get('name')
+                evolution_chain_url = data.get('evolution_chain').get('url')
 
-                if evolves_from is None:
-                    first_evolution = True 
+                def get_chain(chain):
+                        names = []
 
+                        if chain['species']['name']:
+                            name = chain['species']['name']
+                            pokemon = Pokemon.objects.get(name=name)
+                            names.append(pokemon)
+                            # print(f"Current species: {chain['species']['name']}")
 
+                        if chain['evolves_to']:
+                            # print(f"Evolves to: {chain['evolves_to'][0]['species']['name']}") 
+                            next_chain = chain['evolves_to'][0]
+                            names.extend(get_chain(next_chain))
 
+                        return names
+
+                if evolution_chain_url not in evolution_list_dict:
+              
+                    chain_response = requests.get(evolution_chain_url)
+                    chain_data = chain_response.json()
+
+                    chain = chain_data.get('chain') 
+                    
+                    result = get_chain(chain)
+
+                    evolution_list_dict[evolution_chain_url] = result
+                
+                current_pokemon_name = data.get('name')
+                current_pokemon = Pokemon.objects.get(name=current_pokemon_name)
+
+                chain_to_assign = evolution_list_dict[evolution_chain_url]
+
+                current_pokemon.evolution_chain.set(chain_to_assign)
+
+                print(f"added {chain_to_assign} to pokemon {current_pokemon}")
+
+                
 
             except requests.RequestException as e:
                 print(f"Request failed for ID {pokemon_id}: {e}", file=self.stderr)

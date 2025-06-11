@@ -7,3 +7,20 @@
   <li>{{type.name}}</li>
   {% endfor %}
 </ul>
+
+<h3>Evolution Chain</h3>
+{% if pokemon.evolution_chain.all %}
+
+<ul>
+  {% for evolution in pokemon.evolution_chain.all %}
+
+  <a href="{% url 'pokemon_detail' evolution.pk %}">
+    <li>{{evolution}}</li>
+  </a>
+  <img src="{{evolution.photo_url}}" alt="" />
+
+  {% endfor %}
+</ul>
+{% else %}
+<p>No Evolutions</p>
+{% endif %}

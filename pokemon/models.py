@@ -15,6 +15,8 @@ class Pokemon(models.Model):
     photo_url = models.URLField(blank=True, null=True)
 
     type = models.ManyToManyField(Type, related_name="pokemon_set", verbose_name="Type")
+
+    evolution_chain = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
         return self.name
