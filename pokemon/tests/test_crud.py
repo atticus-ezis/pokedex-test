@@ -79,7 +79,7 @@ class MyTestCase(TestCase):
             "type":[self.water_type.pk],
             "photo_url":self.create_photo_url
         })
-        breakpoint()
+
         self.assertEqual(response.status_code, 302)
 
         updated_object = Pokemon.objects.get(pk=1) # Fat Albert 
