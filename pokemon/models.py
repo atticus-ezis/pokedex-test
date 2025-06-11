@@ -23,8 +23,6 @@ class Pokemon(models.Model):
     
 
     
-
-    
     
 
     

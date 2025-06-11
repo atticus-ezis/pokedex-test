@@ -32,7 +32,7 @@ class TestCreatePokemonCommand(TestCase):
         created_chain_1_a = list(self.pokemon_1_a.evolution_chain.all())
         created_chain_1_c = list(self.pokemon_1_c.evolution_chain.all())
 
-        # breakpoint()
+        breakpoint()
 
         self.assertEqual(expected_chain_1, created_chain_1_a)
         self.assertEqual(expected_chain_1, created_chain_1_c)

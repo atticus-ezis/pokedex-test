@@ -20,23 +20,6 @@ class MyTestCase(TestCase):
 
         Pokemon.objects.create(name=self.name_1, photo_url='https://img3.hulu.com/user/v3/artwork/7e22c7c5-9cc0-4969-a56f-dc8f6096f1a8?base_image_bucket_name=image_manager&base_image=c6de0e11-8185-4e8f-8526-94077f958fdf&size=458x687&format=webp').type.add(self.fire_type)
         Pokemon.objects.create(name=self.name_2, photo_url='https://img3.hulu.com/user/v3/artwork/7e22c7c5-9cc0-4969-a56f-dc8f6096f1a8?base_image_bucket_name=image_manager&base_image=c6de0e11-8185-4e8f-8526-94077f958fdf&size=458x687&format=webp').type.add(self.water_type)
-
-
-        self.username = 'JohnnyPotato'
-        self.first_name = 'Johnny'
-        self.last_name = 'Potato'
-        self.email = 'johnny.potato@gmail.com'
-        self.password = 'Pandas098'
-
-        register_response = self.client.post(reverse('register'), {
-            "first_name":self.first_name,
-            "last_name":self.last_name,
-            "email":self.email,
-            "username":self.username,
-            "password1":self.password, 
-            "password2":self.password,
-
-        })
         pass
 
     def test_display(self):
@@ -69,10 +52,6 @@ class MyTestCase(TestCase):
         self.assertEqual(pokemon_displayed.pk, expected_pokemon.pk)
 
     def test_update(self):
-
-        
-
-
         
         response = self.client.post(reverse('update_pokemon', kwargs={'pk':1}), {
             "name":self.create_name,
@@ -82,7 +61,7 @@ class MyTestCase(TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        updated_object = Pokemon.objects.get(pk=1) # Fat Albert 
+        updated_object = Pokemon.objects.get(pk=1)
         self.assertEqual(updated_object.name, self.create_name)
 
     def test_create(self):
