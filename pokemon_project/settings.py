@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'pokemon',
+    'rest_framework',
 
 ]
 
