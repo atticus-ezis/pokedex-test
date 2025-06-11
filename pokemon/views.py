@@ -9,11 +9,13 @@ class PokemonListView(ListView):
     queryset = Pokemon.objects.all().order_by('pk')
     paginate_by = 20 
 
+    # render search form 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = SearchForm(self.request.GET or None)
         return context
 
+    # triggered after GET request
     def get_queryset(self):
         queryset = super().get_queryset()
         form = SearchForm(self.request.GET)
@@ -33,16 +35,17 @@ class PokemonListView(ListView):
 class PokemonDetailView(DetailView):
     model = Pokemon
 
-
 class PokemonCreateView(LoginRequiredMixin, CreateView):
     model = Pokemon
-    fields = ['name', 'type', 'photo_url']
+    fields = ['name', 'type', 'photo_url', 'evolution_chain']
     success_url = reverse_lazy('pokemon_list_view')
+    # default to pokemon_form.html
 
 class PokemonUpdateView(LoginRequiredMixin, UpdateView):
     model = Pokemon
-    fields = ['name', 'type', 'photo_url']
+    fields = ['name', 'type', 'photo_url', 'evolution_chain']
     success_url = reverse_lazy('pokemon_list_view')
+    # default to pokemon_form.html
 
 class PokemonDeleteView(LoginRequiredMixin, DeleteView):
     model = Pokemon

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 
 from .models import Pokemon, Type
 
@@ -13,19 +14,29 @@ class PokemonAdmin(admin.ModelAdmin):
         }),
     ]
     search_fields = ['name']
-    filter_horizontal = ['evolution_chain']
+    filter_horizontal = ['evolution_chain', 'type']
 
-# class PokemonInline(admin.TabularInline):
-#     model = Pokemon
 
 class TypeAdmin(admin.ModelAdmin):
-    list_display = ['name','related_pokemon']
+    list_display = ['name','related_pokemon', 'related_pokemon_count']
     fields = ['name', 'related_pokemon']
     search_fields = ['name']
-    # get pokemon for each
+
+    # find pokemon in each type with type.pokemon_set "pokemon_set is related name"
+
+    def get_queryset(self, request):
+        query = super().get_queryset(request)
+        return query.annotate(pokemon_count=Count('pokemon_set'))
+
     def related_pokemon(self, obj):
         return ", ".join(p.name for p in obj.pokemon_set.all())
     readonly_fields = ['related_pokemon']
+
+    def related_pokemon_count(self, obj):
+        return obj.pokemon_count
+    related_pokemon_count.admin_order_field = 'pokemon_count'
+    related_pokemon_count.short_description = 'Number of Pokémon for each'
+    
 
 
 admin.site.register(Pokemon, PokemonAdmin)

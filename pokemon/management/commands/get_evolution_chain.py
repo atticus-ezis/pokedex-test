@@ -2,22 +2,7 @@ from django.core.management.base import BaseCommand
 from pokemon.models import Pokemon, Type
 import requests
 import time
-
-# for failed requests
-# from requests.adapters import HTTPAdapter
-# from urllib3.util.retry import Retry 
-
-
-# session = requests.Session()
-# retry = Retry(
-#     total=5,
-#     backoff_factor=1,
-#     status_forcelist=[429, 500, 502, 503, 504],
-# )
-# adapter = HTTPAdapter(max_retries=retry)
-# session.mount('http://', adapter)
-# session.mount('http://', adapter)
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class Command(BaseCommand):
     help = "Adds Evoltion Chain to Pokemon"
@@ -44,14 +29,18 @@ class Command(BaseCommand):
                 def get_chain(chain):
                         names = []
 
-                        if chain['species']['name']:
-                            name = chain['species']['name']
-                            pokemon = Pokemon.objects.get(name=name)
-                            names.append(pokemon)
-                            # print(f"Current species: {chain['species']['name']}")
+                        species_name = chain['species']['name']
+                        if species_name:
+                            try:
+                                name = chain['species']['name']
+                                pokemon = Pokemon.objects.get(name=name)
+                                names.append(pokemon)
+                            except ObjectDoesNotExist:
+                                print(f"Pokemon '{species_name}' not found in DB.")
+                                return names
 
                         if chain['evolves_to']:
-                            # print(f"Evolves to: {chain['evolves_to'][0]['species']['name']}") 
+                            time.sleep(1)
                             next_chain = chain['evolves_to'][0]
                             names.extend(get_chain(next_chain))
 
@@ -73,11 +62,11 @@ class Command(BaseCommand):
 
                 chain_to_assign = evolution_list_dict[evolution_chain_url]
 
-                current_pokemon.evolution_chain.set(chain_to_assign)
-
-                print(f"added {chain_to_assign} to pokemon {current_pokemon}")
-
-                time.sleep(2)
+                if set(current_pokemon.evolution_chain.all()) != set(chain_to_assign):
+                    current_pokemon.evolution_chain.set(chain_to_assign)
+                    print(f'made change to {current_pokemon}: {current_pokemon.pk}')
+                else:
+                    print(f"no update needed for {current_pokemon}")
 
             except requests.RequestException as e:
                 print(f"Request failed for ID {pokemon_id}: {e}", file=self.stderr)
