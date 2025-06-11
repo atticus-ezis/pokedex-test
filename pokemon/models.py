@@ -22,11 +22,6 @@ class Pokemon(models.Model):
         return self.name
     
 
-# class CatgoreyType(models.Model):
-#     type = models.ForeignKey(Type, verbose_name=_("Type"), on_delete=models.CASCADE)
-#     pokemon = models.ForeignKey(Pokemon, verbose_name=_("Pokemon"), on_delete=models.CASCADE)
-    
-
     
     
 

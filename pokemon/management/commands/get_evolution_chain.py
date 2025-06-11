@@ -1,7 +1,23 @@
 from django.core.management.base import BaseCommand
 from pokemon.models import Pokemon, Type
-
 import requests
+import time
+
+# for failed requests
+# from requests.adapters import HTTPAdapter
+# from urllib3.util.retry import Retry 
+
+
+# session = requests.Session()
+# retry = Retry(
+#     total=5,
+#     backoff_factor=1,
+#     status_forcelist=[429, 500, 502, 503, 504],
+# )
+# adapter = HTTPAdapter(max_retries=retry)
+# session.mount('http://', adapter)
+# session.mount('http://', adapter)
+
 
 class Command(BaseCommand):
     help = "Adds Evoltion Chain to Pokemon"
@@ -61,7 +77,7 @@ class Command(BaseCommand):
 
                 print(f"added {chain_to_assign} to pokemon {current_pokemon}")
 
-                
+                time.sleep(2)
 
             except requests.RequestException as e:
                 print(f"Request failed for ID {pokemon_id}: {e}", file=self.stderr)
