@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from pokemon.models import Pokemon, Type
 from pokemon.forms import SearchForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class PokemonListView(ListView):
     queryset = Pokemon.objects.all().order_by('pk')
@@ -28,20 +29,22 @@ class PokemonListView(ListView):
 
         return queryset
 
+
 class PokemonDetailView(DetailView):
     model = Pokemon
 
-class PokemonCreateView(CreateView):
+
+class PokemonCreateView(LoginRequiredMixin, CreateView):
     model = Pokemon
     fields = ['name', 'type', 'photo_url']
     success_url = reverse_lazy('pokemon_list_view')
 
-class PokemonUpdateView(UpdateView):
+class PokemonUpdateView(LoginRequiredMixin, UpdateView):
     model = Pokemon
     fields = ['name', 'type', 'photo_url']
     success_url = reverse_lazy('pokemon_list_view')
 
-class PokemonDeleteView(DeleteView):
+class PokemonDeleteView(LoginRequiredMixin, DeleteView):
     model = Pokemon
     success_url = reverse_lazy('pokemon_list_view')
     

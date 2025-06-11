@@ -1,4 +1,8 @@
 <h1>Pokemon Display</h1>
+<form action="{% url 'logout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Logout</button>
+</form>
 <a href="{% url 'create_pokemon' %}"><h3>Create Pokemon</h3></a>
 
 {% comment %} search {% endcomment %}
