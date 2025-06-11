@@ -27,24 +27,24 @@ class Command(BaseCommand):
                 evolution_chain_url = data.get('evolution_chain').get('url')
 
                 def get_chain(chain):
-                        names = []
+                    names = []
 
-                        species_name = chain['species']['name']
-                        if species_name:
-                            try:
-                                name = chain['species']['name']
-                                pokemon = Pokemon.objects.get(name=name)
-                                names.append(pokemon)
-                            except ObjectDoesNotExist:
-                                print(f"Pokemon '{species_name}' not found in DB.")
-                                return names
+                    species_name = chain['species']['name']
+                    if species_name:
+                        try:
+                            name = chain['species']['name']
+                            pokemon = Pokemon.objects.get(name=name)
+                            names.append(pokemon)
+                        except ObjectDoesNotExist:
+                            print(f"Pokemon '{species_name}' not found in DB.")
+                            return names
 
-                        if chain['evolves_to']:
-                            time.sleep(1)
-                            next_chain = chain['evolves_to'][0]
-                            names.extend(get_chain(next_chain))
+                    if chain['evolves_to']:
+                        time.sleep(1)
+                        next_chain = chain['evolves_to'][0]
+                        names.extend(get_chain(next_chain))
 
-                        return names
+                    return names
 
                 if evolution_chain_url not in evolution_list_dict:
               
